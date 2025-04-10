@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix & Flip ROI Calculator - Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-calculator text-blue-600 text-2xl"></i>
+                        <span class="ml-2 text-xl font-semibold">ROI Calculator</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="calculator.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Calculator</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Calculator Section -->
+    <div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Fix & Flip ROI Calculator</h1>
+            
+            <!-- Error Alert (hidden by default) -->
+            <div id="errorAlert" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span id="errorMessage" class="block sm:inline"></span>
+            </div>
+
+            <!-- Calculator Form -->
+            <div class="space-y-6">
+                <div>
+                    <label for="sellerPrice" class="block text-sm font-medium text-gray-700">Seller's Asking Price ($)</label>
+                    <input type="number" id="sellerPrice" placeholder="e.g. 300000" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="arv" class="block text-sm font-medium text-gray-700">After Repair Value (ARV) ($)</label>
+                    <input type="number" id="arv" placeholder="e.g. 400000" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="rehabCosts" class="block text-sm font-medium text-gray-700">Rehab + Holding Costs ($)</label>
+                    <input type="number" id="rehabCosts" placeholder="e.g. 50000" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="closingCosts" class="block text-sm font-medium text-gray-700">Closing Costs Percentage (default 6%)</label>
+                    <input type="number" id="closingCosts" placeholder="e.g. 6" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="desiredROI" class="block text-sm font-medium text-gray-700">Desired ROI Percentage (default 12%)</label>
+                    <input type="number" id="desiredROI" placeholder="e.g. 12" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="roiVariance" class="block text-sm font-medium text-gray-700">ROI Variance Percentage (+/- %, default 2%)</label>
+                    <input type="number" id="roiVariance" placeholder="e.g. 2" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="assignmentFee" class="block text-sm font-medium text-gray-700">Desired Assignment Fee ($, default 10000)</label>
+                    <input type="number" id="assignmentFee" placeholder="e.g. 10000" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <button onclick="calculate()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Calculate
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="result" class="hidden mt-8 bg-gray-50 rounded-lg p-6 space-y-4">
+                <h2 class="text-xl font-semibold text-gray-900">Results</h2>
+                <div id="resultContent" class="space-y-3 text-sm text-gray-600"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-base text-gray-400">
+                    &copy; 2024 Fix & Flip ROI Calculator. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function showError(message) {
+        const errorAlert = document.getElementById('errorAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+        errorAlert.classList.remove('hidden');
+        
+        // Hide the results if there's an error
+        document.getElementById('result').classList.add('hidden');
+    }
+
+    function hideError() {
+        document.getElementById('errorAlert').classList.add('hidden');
+    }
+
+    function validateInputs() {
+        const requiredFields = ['sellerPrice', 'arv', 'rehabCosts'];
+        const missingFields = [];
+
+        requiredFields.forEach(field => {
+            const value = document.getElementById(field).value;
+            if (!value || isNaN(parseFloat(value))) {
+                missingFields.push(field.replace(/([A-Z])/g, ' $1').toLowerCase());
+            }
+        });
+
+        if (missingFields.length > 0) {
+            showError(`Please enter valid numbers for: ${missingFields.join(', ')}`);
+            return false;
+        }
+
+        return true;
+    }
+
+    function calculate() {
+        try {
+            hideError();
+
+            if (!validateInputs()) {
+                return;
+            }
+
+            const sellerPrice = parseFloat(document.getElementById('sellerPrice').value);
+            const arv = parseFloat(document.getElementById('arv').value);
+            const rehabCosts = parseFloat(document.getElementById('rehabCosts').value);
+            const closingCostsPercent = parseFloat(document.getElementById('closingCosts').value) / 100 || 0.06;
+            const desiredROIPercent = parseFloat(document.getElementById('desiredROI').value) || 12;
+            const roiVariancePercent = parseFloat(document.getElementById('roiVariance').value) || 2;
+            const desiredAssignmentFee = parseFloat(document.getElementById('assignmentFee').value) || 10000;
+
+            // Additional validation
+            if (arv <= 0 || sellerPrice <= 0 || rehabCosts < 0) {
+                showError('Please enter valid positive numbers for ARV, Seller Price, and Rehab Costs.');
+                return;
+            }
+
+            const lowerROI = desiredROIPercent - roiVariancePercent;
+            const targetROI = desiredROIPercent;
+            const upperROI = desiredROIPercent + roiVariancePercent;
+
+            const purchasePriceForROI = (arv, rehabCosts, closingCostsPercent, roi) => {
+                const cc = arv * closingCostsPercent;
+                const roiDecimal = roi / 100;
+                const totalCosts = rehabCosts + cc;
+                const denominator = 1 + roiDecimal;
+                return (arv - totalCosts * denominator) / denominator;
+            };
+
+            const purchasePriceLower = purchasePriceForROI(arv, rehabCosts, closingCostsPercent, lowerROI);
+            const purchasePriceTarget = purchasePriceForROI(arv, rehabCosts, closingCostsPercent, targetROI);
+            const purchasePriceUpper = purchasePriceForROI(arv, rehabCosts, closingCostsPercent, upperROI);
+
+            const adjustedFeeLower = Math.max(0, desiredAssignmentFee - (purchasePriceLower - purchasePriceTarget));
+            const adjustedFeeUpper = desiredAssignmentFee;
+
+            const wholesaleOfferLower = purchasePriceLower - adjustedFeeLower;
+            const wholesaleOfferTarget = purchasePriceTarget - desiredAssignmentFee;
+            const wholesaleOfferUpper = purchasePriceUpper - adjustedFeeUpper;
+
+            const calculateROIAndProfit = (purchasePrice) => {
+                const cc = arv * closingCostsPercent;
+                const profit = arv - purchasePrice - rehabCosts - cc;
+                const totalInvestment = purchasePrice + rehabCosts + cc;
+                const roi = (profit / totalInvestment) * 100;
+                return { roi, profit };
+            };
+
+            const { roi: roiLower, profit: profitLower } = calculateROIAndProfit(purchasePriceLower);
+            const { roi: roiTarget, profit: profitTarget } = calculateROIAndProfit(purchasePriceTarget);
+            const { roi: roiUpper, profit: profitUpper } = calculateROIAndProfit(purchasePriceUpper);
+
+            const investorAllIn = purchasePriceTarget + rehabCosts + (arv * closingCostsPercent);
+
+            let adjustedAssignmentFee;
+            if (wholesaleOfferTarget > sellerPrice) {
+                const difference = wholesaleOfferTarget - sellerPrice;
+                adjustedAssignmentFee = desiredAssignmentFee + difference;
+                wholesaleOfferTarget = sellerPrice;
+            } else {
+                adjustedAssignmentFee = desiredAssignmentFee;
+            }
+
+            const formatCurrency = (number) => {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(number);
+            };
+
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            resultDiv.classList.remove('hidden');
+            
+            resultContent.innerHTML = `
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-gray-900 mb-2">Investor Prices</h3>
+                        <p>@ ${lowerROI.toFixed(2)}% ROI: ${formatCurrency(purchasePriceLower)}</p>
+                        <p>@ ${targetROI.toFixed(2)}% ROI (Target): ${formatCurrency(purchasePriceTarget)}</p>
+                        <p>@ ${upperROI.toFixed(2)}% ROI: ${formatCurrency(purchasePriceUpper)}</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-gray-900 mb-2">Wholesale Offers</h3>
+                        <p>@ ${lowerROI.toFixed(2)}% ROI: ${formatCurrency(wholesaleOfferLower)}</p>
+                        <p>@ ${targetROI.toFixed(2)}% ROI: ${formatCurrency(wholesaleOfferTarget)}</p>
+                        <p>@ ${upperROI.toFixed(2)}% ROI: ${formatCurrency(wholesaleOfferUpper)}</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-gray-900 mb-2">Profit Analysis</h3>
+                        <p>@ ${lowerROI.toFixed(2)}% ROI: ${formatCurrency(profitLower)} | ROI: ${roiLower.toFixed(2)}%</p>
+                        <p>@ ${targetROI.toFixed(2)}% ROI: ${formatCurrency(profitTarget)} | ROI: ${roiTarget.toFixed(2)}%</p>
+                        <p>@ ${upperROI.toFixed(2)}% ROI: ${formatCurrency(profitUpper)} | ROI: ${roiUpper.toFixed(2)}%</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-gray-900 mb-2">Investment Summary</h3>
+                        <p>Investor Total Investment (All-In, excl. Assignment Fee): ${formatCurrency(investorAllIn)}</p>
+                        <p>Your Adjusted Assignment Fee: ${formatCurrency(adjustedAssignmentFee)}</p>
+                    </div>
+                </div>
+            `;
+
+        } catch (error) {
+            showError('An unexpected error occurred. Please check your inputs and try again.');
+            console.error('Calculation error:', error);
+        }
+    }
+    </script>
+</body>
+</html>
