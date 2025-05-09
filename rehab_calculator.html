@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix & Flip ROI Calculator - Rehab Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-calculator text-blue-600 text-2xl"></i>
+                        <span class="ml-2 text-xl font-semibold">ROI Calculator</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="calculator.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Calculator</a>
+                        <a href="rehab_calculator.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Rehab Calculator</a>
+                        <a href="comparables.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Comparables</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Rehab Cost Estimator</h1>
+
+            <label class="block text-sm font-medium text-gray-700 mb-2">Square Footage:</label>
+            <input id="squareFootage" type="number" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border" placeholder="e.g. 1500">
+
+            <label class="block text-sm font-medium text-gray-700 mt-4 mb-2">Choose Method:</label>
+            <select id="method" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                <option value="computer">Computer Analyst</option>
+                <option value="self">Self Analyze</option>
+            </select>
+
+            <div id="computerOptions" class="hidden mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Rehab Level:</label>
+                <select id="rehabLevel" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                    <option value="Light">Light ($25/sq ft)</option>
+                    <option value="Moderate">Moderate ($45/sq ft)</option>
+                    <option value="Heavy">Heavy ($60/sq ft)</option>
+                    <option value="Full Gut">Full Gut ($90/sq ft)</option>
+                </select>
+            </div>
+
+            <div id="selfOptions" class="hidden mt-4">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Component Costs</h2>
+                <div id="componentsContainer" class="space-y-4">
+                    <!-- Dynamically inserted inputs here -->
+                </div>
+            </div>
+
+            <label class="block text-sm font-medium text-gray-700 mt-4 mb-2">Contingency % (default 10%):</label>
+            <input id="contingency" type="number" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border" placeholder="e.g. 10">
+
+            <button onclick="calculate()" class="mt-6 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Calculate</button>
+
+            <div id="result" class="mt-6 text-gray-800"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-base text-gray-400">
+                    &copy; 2024 Fix & Flip ROI Calculator. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    const rehabLevels = {
+      "Light": 25,
+      "Moderate": 45,
+      "Heavy": 60,
+      "Full Gut": 90
+    };
+
+    const components = {
+      "Roof": "",
+      "Windows": "",
+      "Siding": "",
+      "Landscaping": "",
+      "Kitchen": "",
+      "Bathrooms": "",
+      "Flooring": "",
+      "Paint": "",
+      "Drywall": "",
+      "HVAC": "",
+      "Plumbing": "",
+      "Electrical": "",
+      "Permits": ""
+    };
+
+    const methodSelect = document.getElementById("method");
+    const computerOptions = document.getElementById("computerOptions");
+    const selfOptions = document.getElementById("selfOptions");
+    const componentsContainer = document.getElementById("componentsContainer");
+
+    // Show computer options by default since it's the first option
+    computerOptions.classList.remove("hidden");
+    selfOptions.classList.add("hidden");
+
+    methodSelect.addEventListener("change", () => {
+      const method = methodSelect.value;
+      computerOptions.classList.toggle("hidden", method !== "computer");
+      selfOptions.classList.toggle("hidden", method !== "self");
+
+      if (method === "self") {
+        componentsContainer.innerHTML = "";
+        for (let [key, unit] of Object.entries(components)) {
+          componentsContainer.innerHTML += `
+            <label class="block text-sm font-medium text-gray-700 mb-2">${key}</label>
+            <input type="number" step="any" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border" id="comp-${key}" placeholder="Enter amount">
+          `;
+        }
+      }
+    });
+
+  function calculate() {
+  const sqftInput = document.getElementById("squareFootage").value.trim();
+  const sqft = parseFloat(sqftInput);
+
+  const method = methodSelect.value;
+  const contingencyInput = document.getElementById("contingency").value.trim();
+  const contingencyRate = contingencyInput ? parseFloat(contingencyInput) / 100 : 0.10;
+
+  let resultText = "";
+
+  if (isNaN(sqft) || sqft <= 0) {
+    resultText = `<p class="text-red-600">Please enter a valid square footage greater than 0.</p>`;
+    document.getElementById("result").innerHTML = resultText;
+    return;
+  }
+
+  let total = 0;
+
+  if (method === "computer") {
+    const level = document.getElementById("rehabLevel").value;
+    const rate = rehabLevels[level];
+    total = sqft * rate;
+    const contingency = total * contingencyRate;
+    const final = total + contingency;
+
+    resultText = `
+      <p><strong>Method:</strong> Computer Analyst</p>
+      <p><strong>Rehab Level:</strong> ${level}</p>
+      <p><strong>Total Material Cost:</strong> $${total.toFixed(2)}</p>
+      <p><strong>Contingency Cost:</strong> $${contingency.toFixed(2)}</p>
+      <p><strong>Final Rehab Budget:</strong> $${final.toFixed(2)}</p>
+    `;
+  } else {
+    const costs = {};
+    for (let key in components) {
+      const val = parseFloat(document.getElementById("comp-" + key).value.trim()) || 0;
+      costs[key] = val;
+      total += val;
+    }
+    const contingency = total * contingencyRate;
+    const final = total + contingency;
+
+    resultText = `
+      <p><strong>Method:</strong> Self Analyze</p>
+      <p><strong>Total Material Cost:</strong> $${total.toFixed(2)}</p>
+      <p><strong>Contingency Cost:</strong> $${contingency.toFixed(2)}</p>
+      <p><strong>Final Rehab Budget:</strong> $${final.toFixed(2)}</p>
+      <pre class="bg-gray-100 p-2 mt-2 rounded text-sm">${JSON.stringify(costs, null, 2)}</pre>
+    `;
+  }
+
+  document.getElementById("result").innerHTML = resultText;
+}
+
+  </script>
+</body>
+</html>
