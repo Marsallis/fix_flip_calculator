@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix & Flip ROI Calculator - Mortgage Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <i class="fas fa-calculator text-blue-600 text-2xl"></i>
+                    <span class="ml-2 text-xl font-semibold">ROI Calculator</span>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                    <a href="calculator.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Calculator</a>
+                    <a href="rehab_calculator.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Rehab Calculator</a>
+                    <a href="mortgage_calculator.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Mortgage Calculator</a>
+                    <a href="comparables.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Comparables</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Mortgage Summary Calculator</h1>
+
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Purchase Loan Inputs</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Purchase Price</label>
+                            <input type="text" id="purchasePrice" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Down Payment (25, 0.25, or 25%)</label>
+                            <input type="text" id="downPayment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Purchase Interest Rate (default 6.5%)</label>
+                            <input type="text" id="purchaseRate" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Loan Term (years)</label>
+                            <input type="number" id="purchaseTerm" value="30" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Rehab / Construction Loan Inputs</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Rehab Budget</label>
+                            <input type="text" id="rehabBudget" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Percent Financed (0, 50, or 100%)</label>
+                            <input type="text" id="rehabFinanced" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Rehab Interest Rate (default 6.5%)</label>
+                            <input type="text" id="rehabRate" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Loan Term (years)</label>
+                            <input type="number" id="rehabTerm" value="30" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Holding Period (months)</label>
+                    <input type="number" id="holdingPeriod" value="60" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm p-2 border">
+                </div>
+
+                <button onclick="runMortgageSummary()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Calculate Summary
+                </button>
+            </div>
+
+            <div id="output" class="mt-8 bg-gray-50 rounded-lg p-6 space-y-4 text-sm text-gray-600"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-base text-gray-400">
+                    &copy; 2024 Fix & Flip ROI Calculator. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function parseInput(value, expectPercent = false) {
+            value = value.toString().trim().replace(/,/g, '').replace(/%/g, '');
+            const num = parseFloat(value);
+            if (isNaN(num)) throw new Error("Invalid input: " + value);
+            return expectPercent ? (num > 1 ? num / 100 : num) : num;
+        }
+
+        function calcMonthlyPayment(amount, annualRate, years) {
+            const monthlyRate = annualRate / 12;
+            const n = years * 12;
+            if (monthlyRate === 0) return amount / n;
+            return amount * (monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
+        }
+
+        function calcInterestPaid(monthlyPayment, months, principal) {
+            return (monthlyPayment * months) - principal;
+        }
+
+        function runMortgageSummary() {
+            try {
+                const purchasePrice = parseInput(document.getElementById('purchasePrice').value);
+                const downPaymentPct = parseInput(document.getElementById('downPayment').value, true);
+                const purchaseRate = parseInput(document.getElementById('purchaseRate').value || '6.5', true);
+                const purchaseTerm = parseInt(document.getElementById('purchaseTerm').value);
+
+                const rehabBudget = parseInput(document.getElementById('rehabBudget').value);
+                const rehabFinancedPct = parseInput(document.getElementById('rehabFinanced').value || '0', true);
+                const rehabRate = parseInput(document.getElementById('rehabRate').value || '6.5', true);
+                const rehabTerm = parseInt(document.getElementById('rehabTerm').value);
+
+                const holdingMonths = parseInt(document.getElementById('holdingPeriod').value);
+
+                const purchaseLoanAmount = purchasePrice * (1 - downPaymentPct);
+                const purchaseMonthlyPayment = calcMonthlyPayment(purchaseLoanAmount, purchaseRate, purchaseTerm);
+                const purchaseInterestPaid = calcInterestPaid(purchaseMonthlyPayment, holdingMonths, purchaseLoanAmount);
+
+                const rehabLoanAmount = rehabBudget * rehabFinancedPct;
+                const rehabCashNeeded = rehabBudget * (1 - rehabFinancedPct);
+                const rehabMonthlyPayment = rehabLoanAmount > 0 ? calcMonthlyPayment(rehabLoanAmount, rehabRate, rehabTerm) : 0;
+                const rehabInterestPaid = rehabLoanAmount > 0 ? calcInterestPaid(rehabMonthlyPayment, holdingMonths, rehabLoanAmount) : 0;
+
+                const totalMonthlyPayment = purchaseMonthlyPayment + rehabMonthlyPayment;
+                const totalCashNeeded = (purchasePrice * downPaymentPct) + rehabCashNeeded;
+
+                const formatCurrency = (number) => {
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).format(number);
+                };
+
+                const output = document.getElementById('output');
+                output.innerHTML = `
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h3 class="font-semibold text-gray-900 mb-2">Input Summary</h3>
+                            <div class="space-y-2">
+                                <p><span class="text-gray-600">Purchase Price:</span> ${formatCurrency(purchasePrice)}</p>
+                                <p><span class="text-gray-600">Rehab Budget:</span> ${formatCurrency(rehabBudget)}</p>
+                                <p><span class="text-gray-600">Down Payment:</span> ${(downPaymentPct * 100).toFixed(1)}%</p>
+                                <p><span class="text-gray-600">Rehab Financing:</span> ${(rehabFinancedPct * 100).toFixed(1)}% financed</p>
+                                <p><span class="text-gray-600">Cash Needed for Rehab:</span> ${formatCurrency(rehabCashNeeded)}</p>
+                                <p><span class="text-gray-600">Holding Period:</span> ${holdingMonths} months</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h3 class="font-semibold text-gray-900 mb-2">Purchase Loan Details</h3>
+                            <div class="space-y-2">
+                                <p><span class="text-gray-600">Loan Amount:</span> ${formatCurrency(purchaseLoanAmount)}</p>
+                                <p><span class="text-gray-600">Interest Rate:</span> ${(purchaseRate * 100).toFixed(2)}%</p>
+                                <p><span class="text-gray-600">Monthly Payment:</span> ${formatCurrency(purchaseMonthlyPayment)}</p>
+                                <p><span class="text-gray-600">Total Interest Paid:</span> ${formatCurrency(purchaseInterestPaid)}</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h3 class="font-semibold text-gray-900 mb-2">Rehab Loan Details</h3>
+                            <div class="space-y-2">
+                                <p><span class="text-gray-600">Loan Amount:</span> ${formatCurrency(rehabLoanAmount)}</p>
+                                <p><span class="text-gray-600">Interest Rate:</span> ${(rehabRate * 100).toFixed(2)}%</p>
+                                <p><span class="text-gray-600">Monthly Payment:</span> ${formatCurrency(rehabMonthlyPayment)}</p>
+                                <p><span class="text-gray-600">Total Interest Paid:</span> ${formatCurrency(rehabInterestPaid)}</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h3 class="font-semibold text-gray-900 mb-2">Total Combined Summary</h3>
+                            <div class="space-y-2">
+                                <p><span class="text-gray-600">Total Cash Out of Pocket:</span> ${formatCurrency(totalCashNeeded)}</p>
+                                <p><span class="text-gray-600">Total Monthly Payment:</span> ${formatCurrency(totalMonthlyPayment)}</p>
+                                <p><span class="text-gray-600">Total Payments Over ${holdingMonths} Months:</span> ${formatCurrency(totalMonthlyPayment * holdingMonths)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    </script>
+</body>
+</html>
