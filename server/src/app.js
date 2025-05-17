@@ -36,7 +36,9 @@ const initDB = async () => {
 
 initDB(); // Run this before your server starts
 
-
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 module.exports = app;
