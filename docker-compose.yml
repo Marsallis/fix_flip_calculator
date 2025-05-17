@@ -29,7 +29,7 @@ services:
       - DB_HOST=db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
-      - DB_NAME=fix_flip_calculator
+      - DB_NAME=dealscout
       - JWT_SECRET=your_development_secret
       - PORT=3001
     healthcheck:
@@ -47,7 +47,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=fix_flip_calculator
+      - POSTGRES_DB=dealscout
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -61,4 +61,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data: 
+  postgres_data:
+    name: dealscout_postgres_data 

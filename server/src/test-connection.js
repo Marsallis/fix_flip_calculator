@@ -13,7 +13,7 @@ console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'is set' : 'not set');
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_NAME || 'fix_flip_calculator',
+  database: process.env.DB_NAME || 'dealscout',
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT || '5432'),
 });
