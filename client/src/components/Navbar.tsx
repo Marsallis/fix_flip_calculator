@@ -92,6 +92,12 @@ const Navbar: React.FC = () => {
             >
               Mortgage Calculator
             </NavButton>
+            <NavButton
+              active={isActive('/market-analysis')}
+              onClick={() => navigate('/market-analysis')}
+            >
+              Market Analysis
+            </NavButton>
           </Box>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

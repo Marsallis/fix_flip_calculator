@@ -112,6 +112,7 @@ const Dashboard: React.FC = () => {
               <NavButton onClick={() => navigate('/calculator')}>Calculator</NavButton>
               <NavButton onClick={() => navigate('/rehab-calculator')}>Rehab Calculator</NavButton>
               <NavButton onClick={() => navigate('/mortgage-calculator')}>Mortgage Calculator</NavButton>
+              <NavButton onClick={() => navigate('/market-analysis')}>Market Analysis</NavButton>
             </Box>
           </Box>
           <IconButton

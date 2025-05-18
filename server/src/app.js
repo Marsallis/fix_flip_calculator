@@ -3,13 +3,28 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
-app.use(cors());
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
+// Configure CORS
+app.use(cors({
+  origin: ['http://localhost', 'http://localhost:80'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
+}));
+
 app.use(express.json());
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const calculatorRoutes = require('./routes/calculatorRoutes');
 const authRoutes = require('./routes/authRoutes');
+const marketAnalysisRoutes = require('./routes/market-analysis');
 
 // Apply authentication middleware to protected routes
 const auth = require('./middleware/auth');
@@ -20,6 +35,7 @@ app.use('/api/auth', authRoutes);
 // Protected routes
 app.use('/api/users', auth, userRoutes);
 app.use('/api/calculators', auth, calculatorRoutes);
+app.use('/api/market-analysis', auth, marketAnalysisRoutes);
 
 // Initialize the database
 const fs = require('fs');

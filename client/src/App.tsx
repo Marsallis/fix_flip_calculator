@@ -9,6 +9,7 @@ import Dashboard from './pages/protected/Dashboard';
 import Calculator from './pages/protected/Calculator';
 import MortgageCalculator from './pages/protected/MortgageCalculator';
 import RehabCalculator from './pages/protected/RehabCalculator';
+import MarketAnalysis from './pages/protected/MarketAnalysis';
 import authService from './services/auth';
 
 // Create a theme instance
@@ -76,6 +77,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <RehabCalculator />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/market-analysis"
+            element={
+              <ProtectedRoute>
+                <MarketAnalysis />
               </ProtectedRoute>
             }
           />
