@@ -33,6 +33,7 @@ services:
       - JWT_SECRET=your_development_secret
       - PORT=3001
       - MOVEFLOW_API_KEY=b914e7f3-b375-494f-a34f-5f4a0b4b9759.rCT7DJOnpYHimC5pFnFIObk4-3YJ6aPngPxY4yL9-sw
+      - GOOGLE_MAPS_API_KEY=AIzaSyBxrf6-9AEiFa2yzCX-GLKtHHmMJ1QzxBw
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
       interval: 10s

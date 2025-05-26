@@ -15,6 +15,7 @@ import {
 import { styled } from '@mui/material/styles';
 import Navbar from '../../components/Navbar';
 import moveflowService from '../../services/moveflow';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -36,15 +37,18 @@ interface MarketAnalysisResults {
 }
 
 const MarketAnalysis: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     latitude: '',
     longitude: '',
     radius: '',
+    address: '',
   });
 
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<MarketAnalysisResults | null>(null);
   const [loading, setLoading] = useState(false);
+  const [displayAddress, setDisplayAddress] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -122,6 +126,26 @@ const MarketAnalysis: React.FC = () => {
     }
   };
 
+  const handleGetCoordinates = async () => {
+    if (formData.address) {
+      try {
+        setLoading(true);
+        const response = await moveflowService.getGoogleGeocode({ address: formData.address });
+        setDisplayAddress(`Coordinates for "${formData.address}": ${response.latitude}, ${response.longitude}`);
+        // Also update the form fields with the coordinates
+        setFormData(prev => ({
+          ...prev,
+          latitude: response.latitude.toString(),
+          longitude: response.longitude.toString()
+        }));
+      } catch (err) {
+        setError('Failed to get coordinates. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <Box>
       <Navbar />
@@ -136,6 +160,44 @@ const MarketAnalysis: React.FC = () => {
 
             <Box component="form" sx={{ mt: 2 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Box sx={{ mb: 4, pb: 4, borderBottom: 1, borderColor: 'divider' }}>
+                  <Typography variant="h6" gutterBottom>
+                    Address Lookup
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    name="address"
+                    type="text"
+                    value={formData.address || ''}
+                    onChange={handleInputChange}
+                    placeholder="Enter an address"
+                  />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    sx={{ mt: 2 }}
+                    onClick={handleGetCoordinates}
+                  >
+                    Get Coordinates
+                  </Button>
+                  {displayAddress && (
+                    <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
+                      <Typography variant="subtitle1" color="primary" gutterBottom>
+                        Results for: {formData.address}
+                      </Typography>
+                      <Typography variant="body1">
+                        Latitude: {formData.latitude}
+                      </Typography>
+                      <Typography variant="body1">
+                        Longitude: {formData.longitude}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
                 <Box>
                   <TextField
                     fullWidth
@@ -181,11 +243,29 @@ const MarketAnalysis: React.FC = () => {
                     size="large"
                     disabled={loading}
                   >
-                    Analyze Market
+                    {loading ? 'Getting Neighborhood Insights...' : 'Get Neighborhood Insights'}
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={analyze}
+                    size="large"
+                    disabled={loading}
+                  >
+                    {loading ? 'Getting Neighborhood Summary...' : 'Get Neighborhood Summary'}
                   </Button>
                 </Box>
               </Box>
             </Box>
+
+            {loading && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <CircularProgress />
+              </Box>
+            )}
 
             {results && (
               <Paper sx={{ p: 3, mt: 3 }}>
